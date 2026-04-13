@@ -1,0 +1,157 @@
+<!-- ==========================================================
+     TRANG DANH MỤC - Hẹ Hẹ Store
+     File: danhmuc.html
+     Chức năng: Hiển thị tất cả sản phẩm của một danh mục cụ thể (iPhone, MacBook, v.v.)
+     Dựa vào tham số ?category= trên URL để lọc sản phẩm.
+     ========================================================== -->
+
+<!doctype html>
+<html lang="vi">
+<head>
+    <!-- ================= META TAGS ================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh mục sản phẩm - HEHESTORE</title>
+
+    <!-- ================= CSS & FONTS ================= -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jaro&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= NÚT NỔI (FLOAT BUTTONS) ================= -->
+    <div class="float-buttons">
+        <a href="tel:0327157039" class="float-btn" title="Gọi ngay: 0327 157 039">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/hung.ngue.79" class="float-btn" target="_blank" rel="noopener" title="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://maps.app.goo.gl/qzLiymFsyTjQMHur7" class="float-btn" target="_blank" rel="noopener" title="Xem vị trí trên Google Maps">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </a>
+        <a href="giohang.html" class="float-btn float-cart" title="Xem giỏ hàng">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="cart-badge" id="cart-badge-count">0</span>
+        </a>
+    </div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="site-header">
+        <div class="container">
+            <h1 class="logo">
+                <a href="index.html">Hẹ Hẹ Store</a>
+            </h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="tintuc.html">Tin tức</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#">Sản phẩm</a>
+                        <div class="dropdown-menu">
+                            <a href="index.html#iphone">iPhone</a>
+                            <a href="index.html#macbook">MacBook</a>
+                            <a href="index.html#ipad">iPad</a>
+                            <a href="index.html#phukien">Phụ kiện</a>
+                        </div>
+                    </li>
+                    <li><a href="giohang.html">Giỏ hàng</a></li>
+                    <li><a href="dangnhap.html">Đăng nhập</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button>Tìm</button>
+                </div>
+                <a href="dangnhap.html" class="account-link" title="Tài khoản">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= NỘI DUNG CHÍNH ================= -->
+    <main>
+        <section class="product-section">
+            <div class="section-header">
+                <!-- Tiêu đề sẽ được thay đổi động bằng script bên dưới -->
+                <h2 id="category-title">DANH MỤC SẢN PHẨM</h2>
+            </div>
+            <!-- Container để render danh sách sản phẩm sau khi đã lọc -->
+            <div id="category-product-list" class="product-list"></div>
+        </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <section>
+                <h3>THÔNG TIN LIÊN HỆ</h3>
+                <p>CN1: Hunghau House: 613 Âu Cơ, Q.Tân Phú, TP.HCM</p>
+                <p>CN2: Hamory campus 624 Âu Cơ, Q.Tân Phú, TP.HCM</p>
+                <p>CN3: HungHau campus: Đại lộ Nguyễn Văn Linh Khu đô thị Nam, TP.HCM</p>
+                <p>Email: nguyentronghung11102019@gmail.com</p>
+            </section>
+            <section>
+                <h3>DỊCH VỤ & HỖ TRỢ</h3>
+                <p>Chính sách giao hàng</p>
+                <p>Chính sách thu cũ đổi mới</p>
+                <p>Chính sách bảo hành</p>
+                <p>Điều cần biết khi mua trả góp 0%</p>
+                <p>Câu hỏi thường gặp</p>
+            </section>
+            <section>
+                <h3>HOTLINE</h3>
+                <p>Hotline: 0327 157 039</p>
+                <p>CSKH: 0327157039</p>
+            </section>
+        </div>
+        <p class="copyright">© 2025 Hẹ Hẹ Store</p>
+    </footer>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Script riêng cho trang danh mục để xử lý lọc sản phẩm -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Lấy tham số 'category' từ URL (ví dụ: ?category=iphone)
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            
+            const titleElement = document.getElementById('category-title');
+            const listElement = document.getElementById('category-product-list');
+            
+            if (category) {
+                // 2. Cập nhật tiêu đề trang dựa trên category
+                const titles = {
+                    'iphone': 'TẤT CẢ IPHONE',
+                    'macbook': 'TẤT CẢ MACBOOK',
+                    'ipad': 'TẤT CẢ IPAD',
+                    'phukien': 'TẤT CẢ PHỤ KIỆN'
+                };
+                titleElement.innerText = titles[category] || 'DANH MỤC SẢN PHẨM';
+                
+                // 3. Lọc mảng sản phẩm từ data.js
+                const filteredProducts = products.filter(p => p.category === category);
+                
+                // 4. Render (hiển thị) sản phẩm ra màn hình
+                let html = '';
+                filteredProducts.forEach(product => {
+                    // Hàm createProductHTML() được định nghĩa trong main.js
+                    html += createProductHTML(product);
+                });
+                listElement.innerHTML = html;
+            }
+        });
+    </script>
+</body>
+</html>

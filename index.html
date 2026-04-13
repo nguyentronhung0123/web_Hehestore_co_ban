@@ -1,0 +1,215 @@
+<!-- ==========================================================
+     TRANG CHỦ - Hẹ Hẹ Store
+     File: index.html
+     Chức năng: Hiển thị Banner, Chính sách và các sản phẩm nổi bật.
+     ========================================================== -->
+
+<!doctype html>
+<html lang="vi">
+<head>
+    <!-- ================= META TAGS ================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEHESTORE - Trang Chủ</title>
+
+    <!-- ================= CSS & FONTS ================= -->
+    <!-- style.css chứa toàn bộ định dạng giao diện của website -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Jaro từ Google Fonts được dùng riêng cho Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Jaro&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= NÚT NỔI (FLOAT BUTTONS) ================= -->
+    <!-- Chứa các nút liên hệ và giỏ hàng luôn cố định ở bên phải màn hình -->
+    <div class="float-buttons">
+        <!-- Nút Gọi điện -->
+        <a href="tel:0327157039" class="float-btn" title="Gọi ngay: 0327 157 039">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </a>
+        <!-- Nút Facebook -->
+        <a href="https://www.facebook.com/hung.ngue.79" class="float-btn" target="_blank" rel="noopener" title="Facebook">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <!-- Nút Google Maps -->
+        <a href="https://maps.app.goo.gl/qzLiymFsyTjQMHur7" class="float-btn" target="_blank" rel="noopener" title="Xem vị trí trên Google Maps">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </a>
+        <!-- Nút Giỏ hàng nổi: Hiển thị số lượng sản phẩm đang có trong giỏ -->
+        <a href="giohang.html" class="float-btn float-cart" title="Xem giỏ hàng">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="cart-badge" id="cart-badge-count">0</span>
+        </a>
+    </div>
+
+    <!-- ================= HEADER (THANH ĐẦU TRANG) ================= -->
+    <header class="site-header">
+        <div class="container">
+            <!-- Logo: Khi click sẽ quay về trang chủ -->
+            <h1 class="logo">
+                <a href="index.html">Hẹ Hẹ Store</a>
+            </h1>
+
+            <!-- Menu điều hướng chính -->
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="tintuc.html">Tin tức</a></li>
+                    <!-- Dropdown Sản phẩm: Chứa các link cuộn nhanh tới danh mục trên trang chủ -->
+                    <li class="nav-dropdown">
+                        <a href="#">Sản phẩm</a>
+                        <div class="dropdown-menu">
+                            <a href="index.html#iphone">iPhone</a>
+                            <a href="index.html#macbook">MacBook</a>
+                            <a href="index.html#ipad">iPad</a>
+                            <a href="index.html#phukien">Phụ kiện</a>
+                        </div>
+                    </li>
+                    <li><a href="giohang.html">Giỏ hàng</a></li>
+                    <!-- Mục Đăng nhập: Sẽ được thay thế bằng tên người dùng trong auth.js nếu đã đăng nhập -->
+                    <li><a href="dangnhap.html">Đăng nhập</a></li>
+                </ul>
+            </nav>
+
+            <!-- Nhóm chức năng bên phải: Ô tìm kiếm và Icon tài khoản -->
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button>Tìm</button>
+                </div>
+                <!-- Icon tài khoản: Dẫn tới trang đăng nhập/thông tin cá nhân -->
+                <a href="dangnhap.html" class="account-link" title="Tài khoản">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= NỘI DUNG CHÍNH (MAIN) ================= -->
+    <main>
+
+        <!-- 1. Banner Slider: Trình chiếu ảnh quảng cáo tự động chuyển slide -->
+        <section class="banner-slider">
+            <div class="banner-track" id="banner-track">
+                <div class="banner-slide"><img src="images/banners/banner1.jpg" alt="Banner 1"></div>
+                <div class="banner-slide"><img src="images/banners/banner2.jpg" alt="Banner 2"></div>
+                <div class="banner-slide"><img src="images/banners/banner3.jpg" alt="Banner 3"></div>
+                <div class="banner-slide"><img src="images/banners/banner4.jpg" alt="Banner 4"></div>
+                <div class="banner-slide"><img src="images/banners/banner5.jpg" alt="Banner 5"></div>
+            </div>
+            <!-- Nút điều hướng slide Trái/Phải -->
+            <button type="button" class="banner-btn banner-prev" id="banner-prev" aria-label="Banner trước">‹</button>
+            <button type="button" class="banner-btn banner-next" id="banner-next" aria-label="Banner sau">›</button>
+        </section>
+
+        <!-- 2. Section Chính sách: Cam kết của cửa hàng đối với khách hàng -->
+        <section class="policy-section">
+            <h2>Chính sách</h2>
+            <div class="policy-list">
+                <article>
+                    <h3>Giao hàng nhanh</h3>
+                    <p>Miễn phí toàn quốc</p>
+                </article>
+                <article>
+                    <h3>Bảo hành chính hãng</h3>
+                    <p>Cam kết 12 tháng</p>
+                </article>
+                <article>
+                    <h3>Đổi trả 7 ngày</h3>
+                    <p>Hoàn tiền nếu lỗi</p>
+                </article>
+                <article>
+                    <h3>Hỗ trợ 24/7</h3>
+                    <p>Tư vấn mọi lúc</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- 3. Danh sách sản phẩm: Các khối này sẽ được JS (main.js) tự động đổ dữ liệu vào -->
+        
+        <!-- Nhóm iPhone -->
+        <section class="product-section iphone" id="iphone">
+            <div class="section-header">
+                <h2>IPHONE</h2>
+                <!-- Nút Xem tất cả dẫn tới trang danhmuc.html kèm tham số lọc -->
+                <a href="danhmuc.html?category=iphone" class="view-all-btn">Xem tất cả ›</a>
+            </div>
+            <div id="iphone-list" class="product-list"></div>
+        </section>
+
+        <!-- Nhóm MacBook -->
+        <section class="product-section macbook" id="macbook">
+            <div class="section-header">
+                <h2>MACBOOK</h2>
+                <a href="danhmuc.html?category=macbook" class="view-all-btn">Xem tất cả ›</a>
+            </div>
+            <div id="macbook-list" class="product-list"></div>
+        </section>
+
+        <!-- Nhóm iPad -->
+        <section class="product-section ipad" id="ipad">
+            <div class="section-header">
+                <h2>IPAD</h2>
+                <a href="danhmuc.html?category=ipad" class="view-all-btn">Xem tất cả ›</a>
+            </div>
+            <div id="ipad-list" class="product-list"></div>
+        </section>
+
+        <!-- Nhóm Phụ kiện -->
+        <section class="product-section phukien" id="phukien">
+            <div class="section-header">
+                <h2>PHỤ KIỆN</h2>
+                <a href="danhmuc.html?category=phukien" class="view-all-btn">Xem tất cả ›</a>
+            </div>
+            <div id="phukien-list" class="product-list"></div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER (CHÂN TRANG) ================= -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <!-- Cột 1: Địa chỉ và Email liên hệ -->
+            <section>
+                <h3>THÔNG TIN LIÊN HỆ</h3>
+                <p>CN1: Hunghau House: 613 Âu Cơ, Q.Tân Phú, TP.HCM</p>
+                <p>CN2:Hamory campus 624 Âu Cơ, Q.Tân Phú, TP.HCM</p>
+                <p>CN3: HungHau campus: Đại lộ Nguyễn Văn Linh Khu đô thị Nam,TP.HCM</p>
+                <p>Email: nguyentronghung11102019@gmail.com</p>
+            </section>
+            <!-- Cột 2: Các liên kết chính sách hỗ trợ -->
+            <section>
+                <h3>DỊCH VỤ & HỖ TRỢ</h3>
+                <p>Chính sách giao hàng</p>
+                <p>Chính sách thu cũ đổi mới</p>
+                <p>Chính sách bảo hành</p>
+                <p>Điều cần biết khi mua trả góp 0%</p>
+                <p>Câu hỏi thường gặp</p>
+            </section>
+            <!-- Cột 3: Số điện thoại Hotline -->
+            <section>
+                <h3>HOTLINE</h3>
+                <p>Hotline: 0327 157 039</p>
+                <p>CSKH: 0327157039</p>
+            </section>
+        </div>
+        <!-- Bản quyền website -->
+        <p class="copyright">© 2025 Hẹ Hẹ Store</p>
+    </footer>
+
+    <!-- ================= SCRIPTS (MÃ JAVASCRIPT) ================= -->
+    <!-- 1. data.js: Chứa mảng dữ liệu sản phẩm -->
+    <script src="js/data.js"></script>
+    <!-- 2. auth.js: Xử lý Đăng ký, Đăng nhập và trạng thái User trên Header -->
+    <script src="js/auth.js"></script>
+    <!-- 3. cart.js: Xử lý thêm/sửa/xóa sản phẩm trong giỏ hàng -->
+    <script src="js/cart.js"></script>
+    <!-- 4. main.js: Render sản phẩm ra trang chủ và khởi tạo Banner Slider -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
