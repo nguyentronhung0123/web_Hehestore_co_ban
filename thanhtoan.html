@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!-- =========================================
-     REGISTRATION PAGE - Trang đăng ký tài khoản
+     CHECKOUT PAGE - Trang thanh toán đơn hàng
      =========================================
-     Mục đích: Cho phép khách hàng tạo tài khoản mới
-     Chức năng: Đăng ký tài khoản, validation form, lưu vào localStorage
-     Dependencies: auth.js (xử lý đăng ký), cart.js (giỏ hàng), data.js (dữ liệu)
+     Mục đích: Thu thập thông tin giao hàng và xác nhận đơn hàng
+     Chức năng: Form thông tin giao hàng, chọn phương thức thanh toán, tóm tắt đơn hàng
+     Dependencies: checkout.js (xử lý thanh toán), cart.js (lấy dữ liệu giỏ hàng), auth.js (xác thực)
      ========================================= -->
 <html lang="vi">
     <!-- =========================================
@@ -18,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- Page title - Tiêu đề trang hiển thị trên tab trình duyệt -->
-        <title>Đăng ký - HEHESTORE</title>
+        <title>Thanh toán đơn hàng - HEHESTORE</title>
 
         <!-- External CSS - File CSS chính của website -->
         <link rel="stylesheet" href="css/style.css">
@@ -125,45 +125,112 @@
         <!-- =========================================
              MAIN CONTENT - Nội dung chính
              =========================================
-             Mục đích: Form đăng ký tài khoản mới
-             Layout: Centered auth box với form đăng ký
+             Mục đích: Form thanh toán và tóm tắt đơn hàng
+             Layout: 2 cột (thông tin giao hàng + tóm tắt đơn hàng)
              ========================================= -->
-        <main class="auth-container">
-            <div class="auth-box">
-                <!-- Tiêu đề form đăng ký -->
-                <h2>TẠO TÀI KHOẢN</h2>
+        <main class="container">
+            <div class="checkout-container">
 
                 <!-- =========================================
-                     REGISTRATION FORM - Form đăng ký
+                     CHECKOUT LEFT - Thông tin giao hàng
                      =========================================
-                     Mục đích: Thu thập thông tin tạo tài khoản
-                     Validation: Client-side validation với HTML5
-                     Storage: Lưu vào localStorage qua auth.js
+                     Mục đích: Thu thập thông tin giao hàng từ khách hàng
+                     Chức năng: Form validation, lưu thông tin giao hàng
                      ========================================= -->
-                <form id="register-form">
-                    <!-- Username input - Trường nhập tên đăng nhập -->
-                    <div class="input-group">
-                        <input type="text" id="reg-username" placeholder="Nhập Tài khoản" required>
+                <section class="checkout-left">
+                    <h2 class="checkout-title">THÔNG TIN GIAO HÀNG</h2>
+
+                    <!-- Checkout form - Form thu thập thông tin giao hàng -->
+                    <form id="checkout-form">
+                        <!-- Họ và tên - Trường bắt buộc -->
+                        <div class="form-group">
+                            <label for="full-name">Họ và tên *</label>
+                            <input type="text" id="full-name" placeholder="Ví dụ: Nguyễn Trọng Hùng" required>
+                        </div>
+
+                        <!-- Số điện thoại - Trường bắt buộc -->
+                        <div class="form-group">
+                            <label for="phone-number">Số điện thoại *</label>
+                            <input type="tel" id="phone-number" placeholder="Ví dụ: 0327xxxxxx" required>
+                        </div>
+
+                        <!-- Địa chỉ giao hàng - Trường bắt buộc -->
+                        <div class="form-group">
+                            <label for="address">Địa chỉ nhận hàng *</label>
+                            <textarea id="address" rows="3" placeholder="Số nhà, tên đường, phường/xã, quận/huyện..." required></textarea>
+                        </div>
+
+                        <!-- Phương thức thanh toán - Radio buttons -->
+                        <div class="form-group">
+                            <label>Phương thức thanh toán</label>
+                            <div class="payment-methods">
+                                <!-- Thanh toán khi nhận hàng (COD) -->
+                                <label class="payment-item">
+                                    <input type="radio" name="payment" value="cod" checked>
+                                    <span>Thanh toán khi nhận hàng (COD)</span>
+                                </label>
+
+                                <!-- Chuyển khoản ngân hàng -->
+                                <label class="payment-item">
+                                    <input type="radio" name="payment" value="bank">
+                                    <span>Chuyển khoản ngân hàng</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Ghi chú đơn hàng - Trường tùy chọn -->
+                        <div class="form-group">
+                            <label for="order-note">Ghi chú đơn hàng (Tùy chọn)</label>
+                            <input type="text" id="order-note" placeholder="Ví dụ: Giao vào giờ hành chính">
+                        </div>
+                    </form>
+                </section>
+
+                <!-- =========================================
+                     CHECKOUT RIGHT - Tóm tắt đơn hàng
+                     =========================================
+                     Mục đích: Hiển thị chi tiết đơn hàng và tổng tiền
+                     Chức năng: Tính tổng tiền, hiển thị danh sách sản phẩm
+                     ========================================= -->
+                <section class="checkout-right">
+                    <h2 class="checkout-title">ĐƠN HÀNG CỦA BẠN</h2>
+
+                    <!-- Danh sách sản phẩm trong đơn hàng -->
+                    <div id="order-summary-list" class="order-summary">
+                        <p class="loading-cart">Đang tải giỏ hàng...</p>
                     </div>
 
-                    <!-- Password input - Trường nhập mật khẩu -->
-                    <div class="input-group">
-                        <input type="password" id="reg-password" placeholder="Mật khẩu" required>
+                    <!-- Box tính tổng tiền -->
+                    <div class="checkout-total-box">
+                        <!-- Tạm tính - Tổng tiền sản phẩm -->
+                        <div class="total-row">
+                            <span>Tạm tính:</span>
+                            <span id="checkout-subtotal">0đ</span>
+                        </div>
+
+                        <!-- Phí vận chuyển - Miễn phí -->
+                        <div class="total-row">
+                            <span>Phí vận chuyển:</span>
+                            <span>Miễn phí</span>
+                        </div>
+
+                        <!-- Đường kẻ ngang -->
+                        <hr>
+
+                        <!-- Tổng cộng cuối cùng -->
+                        <div class="total-row final-total">
+                            <span>TỔNG CỘNG:</span>
+                            <span id="checkout-final-total">0đ</span>
+                        </div>
                     </div>
 
-                    <!-- Confirm password input - Trường xác nhận mật khẩu -->
-                    <div class="input-group">
-                        <input type="password" id="reg-confirm-password" placeholder="Xác nhận mật khẩu" required>
-                    </div>
+                    <!-- Nút xác nhận đặt hàng -->
+                    <button type="button" class="btn-confirm-order" onclick="xuLyThanhToan()">XÁC NHẬN ĐẶT HÀNG</button>
 
-                    <!-- Phone input - Trường nhập số điện thoại -->
-                    <div class="input-group">
-                        <input type="tel" id="reg-phone" placeholder="Nhập Số điện thoại" required>
-                    </div>
+                    <!-- Link quay lại giỏ hàng -->
+                    <a href="giohang.html" class="back-to-cart"> Quay lại giỏ hàng</a>
+                </section>
 
-                    <!-- Submit button - Nút đăng ký -->
-                    <button type="submit" class="btn-submit">Đăng Ký</button>
-                </form>
             </div>
         </main>
 
@@ -212,11 +279,14 @@
         <!-- Data layer - Chứa dữ liệu sản phẩm và người dùng -->
         <script src="js/data.js"></script>
 
-        <!-- Auth script - Xử lý đăng ký tài khoản -->
+        <!-- Auth script - Xử lý xác thực người dùng -->
         <script src="js/auth.js"></script>
 
         <!-- Cart script - Quản lý giỏ hàng -->
         <script src="js/cart.js"></script>
+
+        <!-- Checkout script - Xử lý thanh toán và đặt hàng -->
+        <script src="js/checkout.js"></script>
 
     </body>
 </html>

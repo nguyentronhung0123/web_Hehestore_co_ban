@@ -1,0 +1,252 @@
+<!--
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      HẸ HẸ STORE - TRANG ADMIN (admin.html)                ║
+║                                                                            ║
+║  Mục đích: Giao diện quản trị hệ thống cho chủ cửa hàng                  ║
+║  Chức năng:                                                               ║
+║  • Quản lý đơn hàng (xem, cập nhật trạng thái)                           ║
+║  • Quản lý sản phẩm (thêm, sửa, xóa sản phẩm)                            ║
+║  • Thống kê và báo cáo                                                   ║
+║                                                                            ║
+║  Layout: 2 cột                                                            ║
+║  • Bên trái: Sidebar menu (Quản lý đơn, Quản lý sản phẩm)                ║
+║  • Bên phải: Nội dung chính (bảng dữ liệu, form thêm/sửa)                ║
+║                                                                            ║
+║  JavaScript: admin.js                                                     ║
+║  CSS: style.css (external stylesheet)                                    ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+-->
+
+<!-- =========================================
+     DOCTYPE & HTML STRUCTURE - Cấu trúc HTML5
+     ========================================= -->
+<!doctype html> <!-- Khai báo HTML5 Document Type -->
+<html lang="vi"> <!-- Ngôn ngữ: Tiếng Việt -->
+
+<!-- =========================================
+     HEAD - Phần đầu trang (Metadata)
+     ========================================= -->
+<head>
+    <!-- Character Encoding - Mã hóa ký tự UTF-8 -->
+    <meta charset="UTF-8">
+
+    <!-- Viewport - Responsive design cho mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page Title - Tiêu đề hiển thị trên tab trình duyệt -->
+    <title>Admin - Hẹ Hẹ Store</title>
+
+    <!-- External Stylesheets - Liên kết CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- CSS chính của site -->
+    <link href="https://fonts.googleapis.com/css2?family=Jaro&display=swap" rel="stylesheet"> <!-- Font đặc trưng Jaro -->
+</head>
+
+<!-- =========================================
+     BODY - Nội dung chính của trang
+     ========================================= -->
+<body class="admin-layout"> <!-- Class đặc biệt cho layout admin (2 cột) -->
+
+    <!-- =========================================
+         SIDEBAR - Thanh menu bên trái
+         ========================================= -->
+    <aside class="admin-sidebar">
+        <!-- Logo admin -->
+        <div class="admin-logo">
+            <h1>Hẹ Hẹ Admin</h1>
+        </div>
+
+        <!-- Menu điều hướng admin -->
+        <ul class="admin-menu">
+            <!-- Tab Quản lý đơn hàng - Mặc định active -->
+            <li><a href="#" id="tab-btn-orders" class="active">Quản lý Đơn hàng</a></li>
+
+            <!-- Tab Quản lý sản phẩm -->
+            <li><a href="#" id="tab-btn-products">Quản lý Sản phẩm</a></li>
+
+            <!-- Liên kết trở về trang khách hàng -->
+            <li><a href="index.html">← Trở về Web Khách</a></li>
+        </ul>
+    </aside>
+
+    <!-- =========================================
+         MAIN CONTENT - Nội dung chính bên phải
+         ========================================= -->
+    <main class="admin-main">
+        <!-- Top bar - Thanh trên cùng -->
+        <header class="admin-topbar">
+            <h2 id="admin-page-title">Danh sách Đơn hàng</h2> <!-- Tiêu đề động -->
+            <div class="admin-profile">Chào, Chủ Cửa Hàng!</div> <!-- Thông tin admin -->
+        </header>
+
+        <!-- Nội dung chính -->
+        <div class="admin-content">
+
+            <!-- =========================================
+                 ORDERS SECTION - Phần quản lý đơn hàng
+                 ========================================= -->
+            <div id="section-orders" class="admin-card">
+                <!-- Bảng hiển thị danh sách đơn hàng -->
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th> <!-- ID đơn hàng -->
+                            <th>Khách hàng</th> <!-- Tên khách hàng -->
+                            <th>Ngày đặt</th> <!-- Thời gian đặt hàng -->
+                            <th>Tổng tiền</th> <!-- Tổng giá trị đơn -->
+                            <th>Trạng thái</th> <!-- Trạng thái xử lý -->
+                            <th>Hành động</th> <!-- Nút thao tác -->
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-list">
+                        <!-- Dữ liệu đơn hàng sẽ được render bởi JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- =========================================
+                 PRODUCTS SECTION - Phần quản lý sản phẩm
+                 ========================================= -->
+            <div id="section-products" class="admin-card hidden"> <!-- Ẩn mặc định -->
+
+                <!-- Form thêm sản phẩm mới -->
+                <div class="admin-add-product">
+                    <h3 class="admin-add-title">+ Thêm Sản Phẩm Mới</h3>
+                    <form id="form-add-product" class="admin-form">
+                        <!-- Input tên sản phẩm -->
+                        <input type="text" id="p-name" placeholder="Tên sản phẩm (VD: iPhone 18 Pro)" required>
+
+                        <!-- Input giá sản phẩm -->
+                        <input type="text" id="p-price" placeholder="Giá (VD: 25.000.000đ)" required>
+
+                        <!-- Select danh mục sản phẩm -->
+                        <select id="p-category" required>
+                            <option value="iphone">iPhone</option>
+                            <option value="macbook">MacBook</option>
+                            <option value="ipad">iPad</option>
+                            <option value="phukien">Phụ kiện</option>
+                        </select>
+
+                        <!-- Input link ảnh sản phẩm -->
+                        <input type="text" id="p-image" placeholder="Link ảnh (URL)" required>
+
+                        <!-- Nút submit form -->
+                        <button type="submit">Lưu Sản Phẩm</button>
+                    </form>
+                </div>
+
+                <!-- Tiêu đề danh sách sản phẩm hiện có -->
+                <h3 class="admin-products-title">Sản Phẩm Của Bạn</h3>
+
+                <!-- Bảng hiển thị danh sách sản phẩm -->
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th> <!-- Hình ảnh sản phẩm -->
+                            <th>Tên sản phẩm</th> <!-- Tên sản phẩm -->
+                            <th>Danh mục</th> <!-- Phân loại sản phẩm -->
+                            <th>Giá</th> <!-- Giá bán -->
+                            <th>Hành động</th> <!-- Nút Sửa/Xóa -->
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-list">
+                        <!-- Dữ liệu sản phẩm sẽ được render bởi JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+            <!-- =========================================
+                 ORDER DETAIL MODAL - Modal chi tiết đơn hàng
+                 ========================================= -->
+            <div id="order-modal" class="admin-modal hidden">
+                <div class="admin-modal-content">
+                    <!-- Nút đóng modal -->
+                    <span class="admin-modal-close" id="close-modal-btn">&times;</span>
+
+                    <!-- Tiêu đề modal -->
+                    <h3 class="admin-add-title">Chi tiết đơn hàng: <span id="modal-order-id"></span></h3>
+
+                    <!-- Thông tin khách hàng -->
+                    <div id="modal-customer-info" class="admin-card">
+                        <!-- Thông tin khách hàng sẽ được render bởi JavaScript -->
+                    </div>
+
+                    <!-- Bảng chi tiết sản phẩm trong đơn -->
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th> <!-- Tên sản phẩm -->
+                                <th>Đơn giá</th> <!-- Giá mỗi cái -->
+                                <th>SL</th> <!-- Số lượng -->
+                                <th>Thành tiền</th> <!-- Tổng tiền của item -->
+                            </tr>
+                        </thead>
+                        <tbody id="modal-order-items">
+                            <!-- Chi tiết sản phẩm sẽ được render bởi JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- Tổng tiền đơn hàng -->
+                    <div class="final-total">
+                        Tổng cộng: <strong id="modal-total-price" class="admin-text">0đ</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================================
+                 EDIT PRODUCT MODAL - Modal chỉnh sửa sản phẩm
+                 ========================================= -->
+            <div id="edit-product-modal" class="admin-modal hidden">
+                <div class="admin-modal-content">
+                    <!-- Nút đóng modal -->
+                    <span class="admin-modal-close" id="close-edit-modal-btn">&times;</span>
+
+                    <!-- Tiêu đề modal -->
+                    <h3 class="admin-add-title">Chỉnh sửa thông tin sản phẩm</h3>
+
+                    <!-- Form chỉnh sửa sản phẩm -->
+                    <form id="form-edit-product" class="admin-form">
+                        <!-- Hidden inputs để lưu ID và nguồn gốc -->
+                        <input type="hidden" id="edit-p-id"> <!-- ID sản phẩm -->
+                        <input type="hidden" id="edit-p-source"> <!-- Nguồn dữ liệu -->
+
+                        <!-- Input tên sản phẩm -->
+                        <input type="text" id="edit-p-name" placeholder="Tên sản phẩm" required>
+
+                        <!-- Input giá sản phẩm -->
+                        <input type="text" id="edit-p-price" placeholder="Giá tiền" required>
+
+                        <!-- Select danh mục -->
+                        <select id="edit-p-category" required>
+                            <option value="iphone">iPhone</option>
+                            <option value="macbook">MacBook</option>
+                            <option value="ipad">iPad</option>
+                            <option value="phukien">Phụ kiện</option>
+                        </select>
+
+                        <!-- Input link ảnh -->
+                        <input type="text" id="edit-p-image" placeholder="Link ảnh (URL)" required>
+
+                        <!-- Nút submit và cancel -->
+                        <button type="submit" class="btn-action">Lưu Cập Nhật</button>
+                        <button type="button" id="btn-cancel-edit" class="btn-cancel">Hủy Bỏ</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- =========================================
+         JAVASCRIPT FILES - Các file script
+         ========================================= -->
+    <!-- Data layer - Chứa dữ liệu sản phẩm -->
+    <script src="js/data.js"></script>
+
+    <!-- Admin script - Logic quản trị (quản lý đơn hàng, sản phẩm) -->
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

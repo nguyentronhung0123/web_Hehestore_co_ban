@@ -1,23 +1,40 @@
-// =========================================
-// FILE: main.js - Toàn bộ chức năng JS
-//
-// MỤC LỤC:
-// 1. HIỂN THỊ SẢN PHẨM
-// 2. BANNER SLIDER
-// 3. KHỞI ĐỘNG
-// =========================================
+// File main.js chua tat ca chuc nang JavaScript cho trang khach
+// Muc luc:
+// 1. Dong bo du lieu tu admin
+// 2. Hien thi san pham
+// 3. Banner slider
+// 4. Khoi dong
 
+// Phan 1: Dong bo du lieu tu admin
+// Ham nay giup trang khach doc duoc nhung thay doi ve gia, ten hoac hang moi do admin tao ra trong localStorage
+function getCombinedProducts() {
+    // Lay du lieu goc tu bien products trong data.js
+    const baseProducts = typeof products !== 'undefined' ? [...products] : [];
 
-/* =========================================
-   PHẦN 1: HIỂN THỊ SẢN PHẨM
-   ========================================= */
+    // Lay cac thay doi do admin thuc hien tu localStorage
+    const modifiedBaseProducts = JSON.parse(localStorage.getItem('hehe_modified_base_products')) || {};
+    const deletedBaseIds = JSON.parse(localStorage.getItem('hehe_deleted_base_ids')) || [];
+    const customProducts = JSON.parse(localStorage.getItem('hehe_custom_products')) || [];
 
-/**
- * Tạo chuỗi HTML cho một card sản phẩm.
- * @param {Object} product - Đối tượng sản phẩm từ mảng `products` (trong data.js).
- * @returns {string} - Chuỗi HTML của card sản phẩm.
- */
+    // Loc hang goc: loai bo hang da xoa, ghi de gia/ten moi cho hang bi sua
+    const finalBaseProducts = baseProducts
+        .filter(p => !deletedBaseIds.includes(p.id))
+        .map(p => {
+            if (modifiedBaseProducts[p.id]) {
+                return { ...p, ...modifiedBaseProducts[p.id] }; // Tron du lieu moi de len cu
+            }
+            return p;
+        });
+
+    // Gop mang hang goc da xu ly va mang hang admin tu them
+    return [...finalBaseProducts, ...customProducts];
+}
+
+// Phan 2: Hien thi san pham
+
+// Tao chuoi HTML cho mot card san pham
 function createProductHTML(product) {
+    // Luu y quan trong: ID trong ham addToCartDefault phai duoc boc trong dau nhay don de phong truong hop ID la chuoi
     return `
         <article class="product-item">
             <img src="${product.image}" alt="${product.name}">
@@ -25,35 +42,35 @@ function createProductHTML(product) {
             <p>${product.price}</p>
             <div class="product-actions">
                 <a href="chitietsanpham.html?id=${product.id}">Xem chi tiết</a>
-                <button class="add-to-cart-btn" onclick="addToCartDefault(${product.id})">Thêm vào giỏ</button>
+                <button class="add-to-cart-btn" onclick="addToCartDefault('${product.id}')">Thêm vào giỏ</button>
             </div>
         </article>
     `;
 }
 
-/**
- * Render tất cả sản phẩm lên trang chủ.
- * - Lấy các container: #iphone-list, #macbook-list, #ipad-list, #phukien-list.
- * - Duyệt qua mảng `products`.
- * - Phân loại sản phẩm theo `category` và tạo HTML.
- * - Gán HTML vào các container tương ứng.
- */
+// Render tat ca san pham len trang chu
 function renderAllProducts() {
-    // Lấy các element container từ DOM
+    // Lay cac element container tu DOM
     const iphoneContainer = document.getElementById('iphone-list');
     const macbookContainer = document.getElementById('macbook-list');
     const ipadContainer = document.getElementById('ipad-list');
     const phukienContainer = document.getElementById('phukien-list');
 
-    // Chuẩn bị các chuỗi HTML cho từng danh mục
+    // Chuan bi cac chuoi HTML cho tung danh muc
     let iphoneHTML = '';
     let macbookHTML = '';
     let ipadHTML = '';
     let phukienHTML = '';
 
-    // Duyệt qua mảng `products` (được khai báo trong data.js)
-    products.forEach(product => {
-        switch (product.category) {
+    // Goi ham lay san pham da dong bo
+    const allProducts = getCombinedProducts();
+
+    // Duyet qua mang tong
+    allProducts.forEach(product => {
+        // Bien chu danh muc thanh chu thuong
+        const cat = (product.category || '').toLowerCase();
+
+        switch (cat) {
             case 'iphone':
                 iphoneHTML += createProductHTML(product);
                 break;
@@ -69,64 +86,57 @@ function renderAllProducts() {
         }
     });
 
-    // Gán HTML vào DOM. Kiểm tra container có tồn tại không để tránh lỗi
-    // (hữu ích khi các trang khác không có các list sản phẩm này).
-    if (iphoneContainer) iphoneContainer.innerHTML = iphoneHTML;
-    if (macbookContainer) macbookContainer.innerHTML = macbookHTML;
-    if (ipadContainer) ipadContainer.innerHTML = ipadHTML;
-    if (phukienContainer) phukienContainer.innerHTML = phukienHTML;
+    // Gan HTML vao DOM, kiem tra container co ton tai khong
+    if (iphoneContainer) iphoneContainer.innerHTML = iphoneHTML || '<p style="grid-column: span 4; text-align:center; color:#888;">Chưa có sản phẩm</p>';
+    if (macbookContainer) macbookContainer.innerHTML = macbookHTML || '<p style="grid-column: span 4; text-align:center; color:#888;">Chưa có sản phẩm</p>';
+    if (ipadContainer) ipadContainer.innerHTML = ipadHTML || '<p style="grid-column: span 4; text-align:center; color:#888;">Chưa có sản phẩm</p>';
+    if (phukienContainer) phukienContainer.innerHTML = phukienHTML || '<p style="grid-column: span 4; text-align:center; color:#888;">Chưa có sản phẩm</p>';
 }
 
-
-/* =========================================
-   PHẦN 2: BANNER SLIDER
-   - Tự động chuyển slide mỗi 5 giây.
-   - Có nút prev/next để điều khiển.
-   - Tạm dừng khi giữ chuột (mousedown) trên banner.
-   - Chạy lại khi thả chuột (mouseup) hoặc di chuột ra ngoài (mouseleave).
-   ========================================= */
+// Phan 3: Banner slider
+// Tu dong chuyen slide moi 5 giay, co nut prev/next, tam dung khi giu chuot
 function initBannerSlider() {
-    // --- Khai báo biến ---
-    let currentIndex = 0;       // Index của slide đang hiển thị
-    const totalSlides = 5;      // Tổng số ảnh banner
-    let autoTimer = null;       // Biến để lưu trữ setInterval
-    let isPaused = false;       // Trạng thái có đang tạm dừng hay không
-    const intervalTime = 5000;  // Thời gian tự chuyển slide: 5 giây
+    // Khai bao bien
+    let currentIndex = 0;       // Index cua slide dang hien thi
+    const totalSlides = 5;      // Tong so anh banner
+    let autoTimer = null;       // Bien luu setInterval
+    let isPaused = false;       // Trang thai co dang tam dung hay khong
+    const intervalTime = 5000;  // Thoi gian tu chuyen: 5 giay
 
-    // --- Lấy element từ DOM ---
+    // Lay element tu DOM
     const track = document.getElementById('banner-track');
     const prevBtn = document.getElementById('banner-prev');
     const nextBtn = document.getElementById('banner-next');
     const slider = track ? track.closest('.banner-slider') : null;
 
-    // Chỉ khởi tạo slider nếu các element cần thiết tồn tại (chỉ chạy ở trang chủ)
+    // Chi khoi tao slider neu cac element can thiet ton tai
     if (!track || !slider) return;
 
-    /** Chuyển đến slide có index tương ứng */
+    // Chuyen den slide co index tuong ung
     function goToSlide(index) {
-        // Xử lý để slide chạy vòng lặp (từ slide cuối về đầu và ngược lại)
+        // Xu ly de slide chay vong lap
         currentIndex = ((index % totalSlides) + totalSlides) % totalSlides;
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
-    /** Chuyển đến slide tiếp theo */
+    // Chuyen den slide tiep theo
     function next() {
         goToSlide(currentIndex + 1);
     }
 
-    /** Chuyển về slide trước đó */
+    // Chuyen ve slide truoc do
     function prev() {
         goToSlide(currentIndex - 1);
     }
 
-    /** Bắt đầu chế độ tự động chuyển slide */
+    // Bat dau che do tu dong chuyen slide
     function startAuto() {
-        // Xóa timer cũ (nếu có) để tránh chạy nhiều timer cùng lúc
+        // Xoa timer cu de tranh chay nhieu timer cung luc
         if (autoTimer) clearInterval(autoTimer);
         autoTimer = setInterval(next, intervalTime);
     }
 
-    /** Dừng chế độ tự động */
+    // Dung che do tu dong
     function stopAuto() {
         if (autoTimer) {
             clearInterval(autoTimer);
@@ -134,9 +144,9 @@ function initBannerSlider() {
         }
     }
 
-    // --- Gán sự kiện cho các nút và banner ---
+    // Gan su kien cho cac nut va banner
 
-    // Nút prev: click để về slide trước, sau đó reset timer
+    // Nut prev: click de ve slide truoc, sau do reset timer
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
             prev();
@@ -144,7 +154,7 @@ function initBannerSlider() {
         });
     }
 
-    // Nút next: click để sang slide sau, sau đó reset timer
+    // Nut next: click de sang slide sau, sau do reset timer
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
             next();
@@ -152,19 +162,19 @@ function initBannerSlider() {
         });
     }
 
-    // Giữ chuột trên banner = tạm dừng
+    // Giu chuot tren banner = tam dung
     slider.addEventListener('mousedown', () => {
         isPaused = true;
         stopAuto();
     });
 
-    // Thả chuột = chạy lại
+    // Tha chuot = chay lai
     slider.addEventListener('mouseup', () => {
         isPaused = false;
         startAuto();
     });
 
-    // Di chuột ra ngoài (trong lúc đang giữ) cũng cho chạy lại
+    // Di chuot ra ngoai cung cho chay lai
     slider.addEventListener('mouseleave', () => {
         if (isPaused) {
             isPaused = false;
@@ -172,16 +182,13 @@ function initBannerSlider() {
         }
     });
 
-    // Bắt đầu tự chạy ngay khi khởi tạo
+    // Bat dau tu chay ngay khi khoi tao
     startAuto();
 }
 
-
-/* =========================================
-   PHẦN 3: KHỞI ĐỘNG
-   - Chạy các hàm cần thiết khi trang đã tải xong.
-   ========================================= */
+// Phan 4: Khoi dong
+// Chay cac ham can thiet khi trang da tai xong
 document.addEventListener('DOMContentLoaded', () => {
-    renderAllProducts();    // Hiển thị sản phẩm (chỉ hoạt động hiệu quả ở trang chủ)
-    initBannerSlider();     // Khởi động banner (chỉ hoạt động ở trang chủ)
+    renderAllProducts();    // Hien thi san pham da dong bo o trang chu
+    initBannerSlider();     // Khoi dong banner
 });

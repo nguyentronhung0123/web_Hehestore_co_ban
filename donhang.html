@@ -1,44 +1,18 @@
-<!-- 
-     TRANG CHI TIẾT SẢN PHẨM - Hẹ Hẹ Store
-     File: chitietsanpham.html
-     Chức năng: Hiển thị chi tiết một sản phẩm, cho phép chọn màu sắc, dung lượng và thêm vào giỏ hàng.
-      -->
-
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết sản phẩm - HEHESTORE</title>
+    <title>Danh sách đơn hàng - HEHESTORE</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Jaro&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!--  NÚT NỔI (FLOAT BUTTONS) -->
-    <div class="float-buttons">
-        <a href="tel:0327157039" class="float-btn" title="Gọi ngay: 0327 157 039">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        </a>
-        <a href="https://www.facebook.com/hung.ngue.79" class="float-btn" target="_blank" rel="noopener" title="Facebook">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a href="https://maps.app.goo.gl/qzLiymFsyTjQMHur7" class="float-btn" target="_blank" rel="noopener" title="Xem vị trí trên Google Maps">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        </a>
-        <a href="giohang.html" class="float-btn float-cart" title="Xem giỏ hàng">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span class="cart-badge" id="cart-badge-count">0</span>
-        </a>
-    </div>
-
-    <!--  HEADER  -->
     <header class="site-header">
         <div class="container">
-            <h1 class="logo">
-                <a href="index.html">Hẹ Hẹ Store</a>
-            </h1>
+            <h1 class="logo"><a href="index.html">Hẹ Hẹ Store</a></h1>
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.html">Trang chủ</a></li>
@@ -71,15 +45,20 @@
         </div>
     </header>
 
-    <!--  NỘI DUNG CHÍNH (CHI TIẾT SẢN PHẨM) -->
     <main class="container">
-        <div class="product-detail-container" id="product-detail-content">
-            <!-- Nội dung sẽ được render bằng JavaScript (detail.js) -->
-            <div class="loading-product">Đang tải thông tin sản phẩm...</div>
+        <div class="order-history-container">
+            <h2>LỊCH SỬ ĐƠN HÀNG</h2>
+            
+            <div id="orders-list-wrapper">
+                <p class="loading-data">Đang tải dữ liệu...</p>
+            </div>
+
+            <div class="loading-container">
+                <a href="profile.html" class="btn-back-profile">Quay lại Trang cá nhân</a>
+            </div>
         </div>
     </main>
 
-    <!--  FOOTER  -->
     <footer class="site-footer">
         <div class="footer-container">
             <section>
@@ -106,10 +85,8 @@
         <p class="copyright">© 2026 Hẹ Hẹ Store</p>
     </footer>
 
-    <!-- ================= SCRIPTS ================= -->
     <script src="js/data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/cart.js"></script>
-    <script src="js/detail.js"></script>
-</body>
+    <script src="js/donhang.js"></script> </body>
 </html>
